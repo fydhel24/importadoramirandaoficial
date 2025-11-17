@@ -1,0 +1,99 @@
+/* Gradientes para los botones */
+.btn-gradient-primary {
+    background: linear-gradient(45deg, #c7cdd8, #0c8dd8);
+    color: white;
+}
+
+.btn-gradient-success {
+    background: linear-gradient(45deg, #00b09b, #96c93d);
+    color: white;
+}
+
+.btn-gradient-danger {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    color: white;
+}
+
+.linear-gradient{
+    background: linear-gradient(45deg, #48ceec, #9653e4);
+    color: white;
+}
+
+/* Animación de entrada suave para filas de la tabla */
+/* .animated {
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+} */
+
+.fadeIn {
+    animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Mejorar tipografía de la tabla */
+table {
+    font-family: 'Poppins', sans-serif; /* Usa una fuente más moderna */
+    font-size: 14px; /* Tamaño de fuente más legible */
+}
+
+th {
+    font-weight: 600; /* Un poco más grueso para las cabeceras */
+    font-size: 16px;
+    text-align: center;
+}
+
+td {
+    font-weight: 400;
+    text-align: center;
+}
+
+/* Bordes más gruesos para las celdas */
+th, td {
+    border: 2px solid #dee2e6 !important;
+}
+
+/* Efecto de sombra al pasar el ratón sobre las filas */
+tbody tr:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos de las celdas al hacer hover */
+tbody tr:hover td {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+/* Asegurarse de que las tablas sean responsivas */
+.table-responsive {
+    overflow-x: auto; /* Permite el desplazamiento horizontal */
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 767px) {
+    table {
+        font-size: 12px; /* Reducir tamaño de la fuente en pantallas pequeñas */
+    }
+    th, td {
+        padding: 8px 10px; /* Menor padding para hacer más espacio */
+    }
+    .btn {
+        font-size: 12px; /* Botones más pequeños */
+        padding: 6px 8px; /* Botones con menos padding */
+    }
+}
+
+/* Mantener el estilo de la tabla en pantallas grandes */
+@media (min-width: 768px) {
+    table {
+        font-size: 14px; /* Tamaño de fuente normal para pantallas más grandes */
+    }
+}
