@@ -16,7 +16,6 @@ class NewVentasController extends Controller
         $sucursales = Sucursale::where('estado', 'activo')->get();
         return view('ventas.index', compact('sucursales'));
     }
-
 public function productos(Request $request, $sucursalId)
 {
     $sucursal = Sucursale::findOrFail($sucursalId);
@@ -26,11 +25,12 @@ public function productos(Request $request, $sucursalId)
             'producto.marca',
             'producto.fotos' => fn($q) => $q->limit(1)
         ])
-        ->where('id_sucursal', $sucursalId)
-        ->join('productos', 'productos.id', '=', 'inventario.id_producto')
+        ->join('productos', 'productos.id', '=', 'inventario.id_producto') // ✅ Solo para ordenar/filtrar
+        ->where('inventario.id_sucursal', $sucursalId)
         ->orderByDesc('inventario.favorito')
         ->orderByDesc('productos.estado')
-        ->orderBy('productos.created_at', 'desc');
+        ->orderBy('productos.created_at', 'desc')
+        ->select('inventario.*'); // 🔑 Clave: selecciona solo inventario
 
     if ($request->filled('search')) {
         $search = $request->search;
@@ -39,7 +39,6 @@ public function productos(Request $request, $sucursalId)
 
     $productos = $query->paginate(9);
 
-    // ✅ Manejo AJAX: solo devolvemos HTML parcial
     if ($request->ajax()) {
         $html = view('ventas.partials.productos-list', compact('productos'))->render();
         $pagination = $productos->links()->toHtml();
@@ -49,7 +48,6 @@ public function productos(Request $request, $sucursalId)
         ]);
     }
 
-    // ✅ Petición normal: devolvemos la vista completa
     $categorias = Categoria::all();
     $marcas = Marca::all();
 
@@ -60,7 +58,12 @@ public function productos(Request $request, $sucursalId)
     })->orWhere('email', 'JHOELSURCO2@GMAIL.COM')->get();
 
     return view('ventas.productos', compact(
-        'sucursal', 'productos', 'categorias', 'marcas', 'users', 'sucursalId'
+        'sucursal',
+        'productos',
+        'categorias',
+        'marcas',
+        'users',
+        'sucursalId'
     ));
 }
 

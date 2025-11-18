@@ -737,11 +737,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/analisis', [AnalisisPredictivoController::class, 'index'])->name('analisis.index');
     Route::get('/analisis/search-ajax', [AnalisisPredictivoController::class, 'searchProductos'])->name('analisis.searchProductos');
     // Rutas para el nuevo controlador de ventas
-Route::controller(NewVentasController::class)->group(function () {
-    Route::get('/ventas', 'index')->name('ventas.index');
-    Route::get('/ventas/productos/{sucursal}', 'productos')->name('ventas.productos');
-    Route::get('/ventas/sugerencias/{sucursal}', 'sugerencias')->name('ventas.sugerencias');
-});
+    Route::controller(NewVentasController::class)->group(function () {
+        Route::get('/ventas', 'index')->name('ventas.index');
+        Route::get('/ventas/productos/{sucursal}', 'productos')->name('ventas.productos');
+        Route::get('/ventas/sugerencias/{sucursal}', 'sugerencias')->name('ventas.sugerencias');
+    });
 });
 
 // Ruta pública
