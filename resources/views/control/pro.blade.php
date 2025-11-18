@@ -39,7 +39,7 @@
                 <i class="fas fa-shopping-cart mr-2"></i> Carrito Vendedor (<span id="carrito-contador">0</span>)
             </a>
 
-          
+
             {{-- <!-- Formulario de búsqueda -->
             <form class="d-flex ml-2 mb-2" autocomplete="off">
                 <div class="input-group">
@@ -119,7 +119,7 @@
             @csrf
             {{-- linea de codigo agregado --}}
             <input type="hidden" id="sucursal_id" value="{{ auth()->user()->sucursal_id }}">
-<input type="hidden" name="venta_token" value="{{ session('venta_token') }}">
+            <input type="hidden" name="venta_token" value="{{ session('venta_token') }}">
 
             <div id="carritoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="carritoModalLabel"
                 aria-hidden="true">
@@ -165,9 +165,24 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <label for="vendedorSearch">¿Elegir vendedor?</label>
+                                        <div class="mb-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="usar_vendedor"
+                                                    id="usar_vendedor_no" value="no" checked>
+                                                <label class="form-check-label" for="usar_vendedor_no">No</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="usar_vendedor"
+                                                    id="usar_vendedor_si" value="si">
+                                                <label class="form-check-label" for="usar_vendedor_si">Sí</label>
+                                            </div>
+                                        </div>
+
                                         <label for="vendedorSearch">Vendedor</label>
-                                        <input type="text" id="vendedorSearch" class="form-control" required
-                                            placeholder="Escribe para buscar vendedor..." list="sugerencias_vendedores">
+                                        <input type="text" id="vendedorSearch" class="form-control"
+                                            placeholder="Escribe para buscar vendedor..." list="sugerencias_vendedores"
+                                            disabled>
                                         <datalist id="sugerencias_vendedores">
                                             @foreach ($users as $user)
                                                 <option value="{{ $user->name }}" data-id="{{ $user->id }}">
@@ -175,7 +190,8 @@
                                         </datalist>
 
                                         <!-- Campo oculto para almacenar el ID del vendedor -->
-                                        <input type="hidden" name="id_user" id="id_user">
+                                        <input type="hidden" name="id_user" id="id_user"
+                                            value="{{ $defaultVendedorId }}">
                                     </div>
                                 </div>
 
@@ -455,29 +471,62 @@
 
 
     <script>
-        // Detectar la selección del vendedor
-        const vendedorInput = document.getElementById('vendedorSearch');
-        const idUserInput = document.getElementById('id_user'); // El campo oculto para el ID del vendedor
-        let selectedVendedor = null;
+        // Detectar la selección del vendedor y manejar la opción "Usar vendedor?"
+        document.addEventListener('DOMContentLoaded', function() {
+            const vendedorInput = document.getElementById('vendedorSearch');
+            const idUserInput = document.getElementById('id_user'); // El campo oculto para el ID del vendedor
+            const usarNo = document.getElementById('usar_vendedor_no');
+            const usarSi = document.getElementById('usar_vendedor_si');
+            let selectedVendedor = null;
+            const defaultVendedorId = '{{ $defaultVendedorId }}';
 
-        vendedorInput.addEventListener('input', function() {
-            const nombreSeleccionado = vendedorInput.value;
-            const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores').options).find(
-                option => option.value === nombreSeleccionado);
-
-            if (optionSeleccionada) {
-                // Guardar el vendedor seleccionado
-                selectedVendedor = {
-                    id: optionSeleccionada.dataset.id,
-                    nombre: nombreSeleccionado
-                };
-
-                // Asignar el ID del vendedor al campo oculto
-                idUserInput.value = selectedVendedor.id;
-            } else {
-                selectedVendedor = null;
-                idUserInput.value = ''; // Limpiar el campo oculto si no hay selección
+            function aplicarUsoVendedor() {
+                if (usarNo && usarNo.checked) {
+                    vendedorInput.disabled = true;
+                    vendedorInput.required = false;
+                    vendedorInput.value = '';
+                    idUserInput.value = defaultVendedorId;
+                } else {
+                    vendedorInput.disabled = false;
+                    vendedorInput.required = true;
+                    // Si el input coincide con una opción, asignar id, sino limpiar
+                    const option = Array.from(document.getElementById('sugerencias_vendedores').options).find(o => o
+                        .value === vendedorInput.value);
+                    if (option) idUserInput.value = option.dataset.id;
+                    else idUserInput.value = '';
+                }
             }
+
+            if (usarNo) usarNo.addEventListener('change', aplicarUsoVendedor);
+            if (usarSi) usarSi.addEventListener('change', aplicarUsoVendedor);
+
+            vendedorInput.addEventListener('input', function() {
+                const nombreSeleccionado = vendedorInput.value;
+                const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores')
+                    .options).find(
+                    option => option.value === nombreSeleccionado);
+
+                if (optionSeleccionada) {
+                    // Guardar el vendedor seleccionado
+                    selectedVendedor = {
+                        id: optionSeleccionada.dataset.id,
+                        nombre: nombreSeleccionado
+                    };
+
+                    // Asignar el ID del vendedor al campo oculto
+                    idUserInput.value = selectedVendedor.id;
+                } else {
+                    selectedVendedor = null;
+                    if (usarSi && usarSi.checked) {
+                        idUserInput.value = '';
+                    } else {
+                        idUserInput.value = defaultVendedorId;
+                    }
+                }
+            });
+
+            // Aplicar estado inicial
+            aplicarUsoVendedor();
         });
     </script>
 
@@ -506,17 +555,17 @@
                                 <div class="card card-widget widget-user shadow-lg">
                                             ${producto.producto.fotos && producto.producto.fotos.length > 0 ? 
                                                 `<div class="widget-user-header text-white" style="background: url('{{ asset('storage/') }}/${producto.producto.fotos[0].foto}') center center; background-size: cover;">
-                                                                                                                                                                                                        <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
-                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                    <div class="widget-user-image">
-                                                                                                                                                                                                        <img class="img-circle" src="{{ asset('storage/') }}/${producto.producto.fotos[0].foto}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
-                                                                                                                                                                                                    </div>` : 
+                                                                                                                                                                                                                <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div class="widget-user-image">
+                                                                                                                                                                                                                <img class="img-circle" src="{{ asset('storage/') }}/${producto.producto.fotos[0].foto}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
+                                                                                                                                                                                                            </div>` : 
                                                 `<div class="widget-user-header text-white" style="background-color: #ccc;">
-                                                                                                                                                                                                        <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
-                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                    <div class="widget-user-image">
-                                                                                                                                                                                                        <img class="img-circle" src="{{ asset('path/to/default/image.jpg') }}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
-                                                                                                                                                                                                    </div>`
+                                                                                                                                                                                                                <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div class="widget-user-image">
+                                                                                                                                                                                                                <img class="img-circle" src="{{ asset('path/to/default/image.jpg') }}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
+                                                                                                                                                                                                            </div>`
                                             }
                                     <br>
                                     <div class="card-footer">
@@ -908,18 +957,6 @@
             const sucursalId = {{ $id }};
             localStorage.removeItem(`carrito-${sucursalId}`);
         });
-
-        /* listaCarrito.addEventListener('click', function(e) {
-            if (e.target.classList.contains('eliminar')) {
-                const id = e.target.getAttribute('data-id');
-                carrito = carrito.filter(item => item.id !== id);
-                actualizarCarritoContador();
-                mostrarCarrito();
-                // Actualizar el carrito en localStorage
-                const sucursalId = {{ $id }};
-                localStorage.setItem(`carrito-${sucursalId}`, JSON.stringify(carrito));
-            }
-        }); */
         listaCarrito.addEventListener('click', function(e) {
             if (e.target.classList.contains('eliminar')) {
                 const id = parseInt(e.target.getAttribute('data-id')); // Convertir a número
@@ -1174,28 +1211,6 @@
         });
     </script>
     <script>
-        // Function to filter products
-        /* function filterProducts() {
-            const searchInput = document.getElementById('search-input');
-            const filter = searchInput.value.toUpperCase();
-            const productList = document.getElementById('product-list');
-            const cards = productList.getElementsByTagName('div');
-
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i];
-                if (card.classList.contains('col-md-4')) {
-                    const productName = card.querySelector('.nombre-producto').textContent;
-                    if (productName.toUpperCase().indexOf(filter) > -1) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                }
-            }
-        } */
-
-        // Add event listener to the search input
-        //document.getElementById('search-input').addEventListener('input', filterProducts);
         // Evento para cerrar el modal del carrito y abrir el modal del QR
         document.getElementById('ver-qr').addEventListener('click', function() {
             $('#carritoModal').modal('hide');
