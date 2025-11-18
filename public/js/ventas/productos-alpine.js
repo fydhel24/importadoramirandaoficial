@@ -1,4 +1,44 @@
 document.addEventListener('alpine:init', () => {
+    Alpine.store('carrito', {
+        items: (() => {
+            try {
+                const data = localStorage.getItem('carrito_ventas');
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
+        })(),
+
+        guardar() {
+            localStorage.setItem('carrito_ventas', JSON.stringify(this.items));
+        },
+
+        get totalItems() {
+            return this.items.reduce((sum, item) => sum + item.cantidad, 0);
+        },
+
+        agregar(producto) {
+            if (producto.stock <= 0) return;
+            const item = this.items.find(i => i.id === producto.id);
+            if (item) {
+                item.cantidad++;
+            } else {
+                this.items.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    precio: producto.precio,
+                    cantidad: 1
+                });
+            }
+            this.guardar();
+        },
+
+        quitar(id) {
+            this.items = this.items.filter(i => i.id !== id);
+            this.guardar();
+        }
+    });
+
     Alpine.data('productosApp', (sucursalId) => ({
         query: '',
         sugerencias: [],
@@ -6,26 +46,25 @@ document.addEventListener('alpine:init', () => {
         debounceTimer: null,
 
         init() {
+            // 🚫 Ya NO inicializamos ni limpiamos por sucursal aquí
             this.loadProductos();
             this.$watch('query', () => {
-                if (this.query.length < 2) {
-                    this.sugerencias = [];
-                }
+                if (this.query.length < 2) this.sugerencias = [];
                 clearTimeout(this.debounceTimer);
                 this.debounceTimer = setTimeout(() => {
                     this.loadProductos(1);
-                    if (this.query.length >= 2) {
-                        this.buscarSugerencias();
-                    }
+                    if (this.query.length >= 2) this.buscarSugerencias();
                 }, 350);
+            });
+
+            this.$el.addEventListener('agregar-al-carrito', (e) => {
+                Alpine.store('carrito').agregar(e.detail);
             });
         },
 
         async loadProductos(page = 1) {
             const url = new URL(`/ventas/productos/${sucursalId}`, window.location.origin);
-            if (this.query.length >= 2) {
-                url.searchParams.set('search', this.query);
-            }
+            if (this.query.length >= 2) url.searchParams.set('search', this.query);
             url.searchParams.set('page', page);
 
             try {
@@ -41,9 +80,7 @@ document.addEventListener('alpine:init', () => {
 
         async buscarSugerencias() {
             try {
-                const res = await axios.get(`/ventas/sugerencias/${sucursalId}`, {
-                    params: { q: this.query }
-                });
+                const res = await axios.get(`/ventas/sugerencias/${sucursalId}`, { params: { q: this.query } });
                 this.sugerencias = res.data;
             } catch (err) {
                 console.error('Error en sugerencias:', err);
@@ -58,7 +95,6 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
-// Soporte para paginación AJAX
 document.addEventListener('click', (e) => {
     const link = e.target.closest('.pagination a');
     if (!link) return;

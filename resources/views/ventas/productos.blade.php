@@ -3,9 +3,16 @@
 @section('title', "Productos - {$sucursal->nombre}")
 
 @section('content_header')
+<div class="d-flex justify-content-between align-items-center">
     <h1>Productos en {{ $sucursal->nombre }}</h1>
+    <div class="position-relative" x-data="{ carrito: $store.carrito }">
+        <div class="d-flex align-items-center text-white bg-primary rounded-pill px-3 py-1 shadow-sm">
+            <i class="fas fa-shopping-cart me-2"></i>
+            <span class="fw-bold" x-text="carrito.totalItems || 0"></span>
+        </div>
+    </div>
+</div>
 @stop
-
 @section('content')
 <div class="container-fluid" x-data="productosApp({{ $sucursalId }})">
     @include('ventas.partials.search-box')

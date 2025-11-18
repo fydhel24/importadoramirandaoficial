@@ -21,7 +21,23 @@
                 <h6 class="card-title">{{ $item->producto->nombre }}</h6>
                 <p class="text-muted small flex-grow-1">{{ Str::limit($item->producto->descripcion, 60) }}</p>
                 <p class="mb-1"><strong>Precio:</strong> Bs {{ number_format($item->producto->precio, 2) }}</p>
-                <p class="mb-0"><strong>Stock:</strong> {{ $item->cantidad }}</p>
+                <p class="mb-2"><strong>Stock:</strong> {{ $item->cantidad }}</p>
+
+                <!-- Botón dinámico -->
+                <button 
+                    type="button"
+                    x-data
+                    @click="$dispatch('agregar-al-carrito', {
+                        id: {{ $item->producto->id }},
+                        nombre: '{{ addslashes($item->producto->nombre) }}',
+                        precio: {{ $item->producto->precio }},
+                        stock: {{ $item->cantidad }}
+                    })"
+                    class="btn btn-sm {{ $item->cantidad > 0 ? 'btn-success' : 'btn-outline-secondary disabled' }}"
+                    :disabled="{{ $item->cantidad <= 0 ? 'true' : 'false' }}"
+                >
+                    {{ $item->cantidad > 0 ? 'Agregar' : 'Sin stock' }}
+                </button>
             </div>
         </div>
     </div>
