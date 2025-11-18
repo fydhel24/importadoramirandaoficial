@@ -1,5 +1,7 @@
 @extends('adminlte::page')
+
 @section('title', 'ventas')
+
 @section('content_header')
     <style>
         #clock {
@@ -11,6 +13,7 @@
     </style>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-4">Venta de productos de {{ $sucur->nombre }}</h1>
+
         <div id="clock" class="text-right"></div>
     </div>
 @stop
@@ -25,7 +28,9 @@
         margin: 1.75rem auto;
     }
 </style>
+
 @section('content')
+
     <div id="lista-cursos" class="container">
         <div class="d-flex flex-wrap justify-content-end">
             <!-- Carrito -->
@@ -43,10 +48,14 @@
         <div class="row" id="product-list">
             <!-- Aquí se cargarán los productos dinámicamente con AJAX -->
         </div>
+
         <!-- Paginación -->
         <div id="pagination-links" class="pagination-gutter">
             <!-- Los links de paginación se cargarán aquí dinámicamente -->
         </div>
+
+
+
         <style>
             .out-of-stock-card {
                 background-color: #ffcccc;
@@ -90,6 +99,7 @@
                 /* Bloquear eventos del mouse */
             }
         </style>
+
         {{-- 
         modal carrito --}}
         <form id="venta-form" method="POST" action="{{ route('control.fin') }}" target="_blank">
@@ -104,32 +114,33 @@
                     <div class="modal-content">
                         <div class="modal-header d-flex justify-content-between align-items-center">
                             <h5 class="modal-title" id="carritoModalLabel">Productos en el Carrito</h5>
-                            <div class="row align-items-center w-50"> <!-- Ajustado ancho y alineación -->
+                            <label for="compra_producto"><strong>Compra del Producto</strong></label>
+                            <div class="row">
                                 <div class="col-md-4">
-
-                                </div>
-                                <div class="col-md-6 d-flex justify-content-start"> <!-- Contenedor para el switch -->
-                                    <!-- From Uiverse.io by JaydipPrajapati1910 -->
-                                    <label class="mr-3 mb-0">Garantía:</label>
-                                    <div class="toggle-button-cover">
-                                        <div id="button-3" class="button r">
-
-                                            <input class="checkbox" type="checkbox" name="garantia" id="garantia_switch"
-                                                value="con garantia" unchecked> <!-- Inicialmente sin marcar -->
-                                            <div class="knobs"></div>
-                                            <div class="layer"></div>
-                                        </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="garantia" value="con garantia"
+                                            id="con_garantia">
+                                        <label class="form-check-label" for="con_garantia">Con
+                                            Garantía</label>
                                     </div>
-                                    <!-- Campo oculto para manejar "sin garantia" cuando el switch esté apagado -->
-                                    <input type="hidden" name="garantia" id="garantia_hidden" value="sin garantia">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="garantia" value="sin garantia"
+                                            id="sin_garantia" checked>
+                                        <label class="form-check-label" for="sin_garantia">Sin
+                                            Garantía</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
+
                                 <!-- Botón Ver QR movido aquí -->
                                 <button type="button" class="btn btn-info btn-sm mr-2" id="ver-qr" data-toggle="modal"
                                     data-target="#qrModal" data-dismiss="modal">
                                     Ver QR
                                 </button>
+
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -165,7 +176,7 @@
                                     <div class="form-group">
                                         <label for="ci">CI / NIT</label>
                                         <input type="text" name="ci" id="ci" class="form-control"
-                                            placeholder="Ingrese CI del cliente" required>
+                                            placeholder="Ingrese CI del cliente">
                                     </div>
                                 </div>
 
@@ -175,18 +186,19 @@
                                             <label for="vendedorSearch" class="mr-3 mb-0"><strong>¿Elegir
                                                     vendedor?</strong></label>
 
-                                            <!-- Contenedor para el nuevo switch -->
-                                            <div class="toggle-button-cover-vendedor">
-                                                <div id="button-vendedor" class="button-vendedor r">
-                                                    <input class="checkbox-vendedor" type="checkbox" name="usar_vendedor"
-                                                        id="usar_vendedor_switch" value="si">
-                                                    <div class="knobs-vendedor"></div>
-                                                    <div class="layer-vendedor"></div>
+                                            <div>
+                                                <div class="form-check form-check-inline m-0">
+                                                    <input class="form-check-input" type="radio" name="usar_vendedor"
+                                                        id="usar_vendedor_no" value="no" checked>
+                                                    <label class="form-check-label" for="usar_vendedor_no">No</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline m-0">
+                                                    <input class="form-check-input" type="radio" name="usar_vendedor"
+                                                        id="usar_vendedor_si" value="si">
+                                                    <label class="form-check-label" for="usar_vendedor_si">Sí</label>
                                                 </div>
                                             </div>
-                                            <!-- Campo oculto para manejar "no" cuando el switch esté apagado -->
-                                            <input type="hidden" name="usar_vendedor" id="usar_vendedor_hidden"
-                                                value="no">
                                         </div>
 
                                         <input type="text" id="vendedorSearch" class="form-control"
@@ -234,49 +246,30 @@
                                         <label for="tipo_pago">Método de Pago</label>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label class="checkbox-wrapper">
-                                                    <input required type="radio" name="tipo_pago" value="Efectivo"
-                                                        id="efectivo_radio" >
-                                                    <div class="checkmark">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <path d="M20 6L9 17L4 12" stroke-width="3"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                        </svg>
-                                                    </div>
-                                                    <span class="label">Efectivo</span>
-                                                </label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_pago"
+                                                        value="Efectivo" id="efectivo">
+                                                    <label class="form-check-label" for="efectivo">Efectivo</label>
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="checkbox-wrapper">
-                                                    <input type="radio" name="tipo_pago" value="QR"
-                                                        id="transferencia_bancaria_radio">
-                                                    <div class="checkmark">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <path d="M20 6L9 17L4 12" stroke-width="3"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                        </svg>
-                                                    </div>
-                                                    <span class="label">QR</span>
-                                                </label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_pago"
+                                                        value="QR" id="transferencia_bancaria">
+                                                    <label class="form-check-label mr-2"
+                                                        for="transferencia_bancaria">Transferencia QR</label>
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="checkbox-wrapper">
-                                                    <input type="radio" name="tipo_pago" value="Efectivo y QR"
-                                                        id="pago_efectivo_qr_radio">
-                                                    <div class="checkmark">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <path d="M20 6L9 17L4 12" stroke-width="3"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                        </svg>
-                                                    </div>
-                                                    <span class="label">Efectivo y QR</span>
-                                                </label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_pago"
+                                                        value="Efectivo y QR" id="pago_efectivo_qr">
+                                                    <label class="form-check-label" for="pago_efectivo_qr">Pago
+                                                        Efectivo y
+                                                        QR</label>
+                                                </div>
                                             </div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -320,6 +313,8 @@
                 </div>
             </div>
         </form>
+
+
         <!-- Agregar el script para mostrar los campos -->
         <script>
             // Mostrar campos correctamente según el tipo de pago seleccionado
@@ -327,9 +322,11 @@
                 radio.addEventListener('change', function() {
                     var montoPagadoLabel = document.getElementById('monto-pagado-label');
                     var pagosEfctivoQr = document.getElementById('pagos-efectivo-qr');
+
                     // Restablecer la visibilidad de los campos antes de cambiar el comportamiento
                     pagosEfctivoQr.style.display = 'none';
                     montoPagadoLabel.textContent = 'Monto Pagado';
+
                     // Mostrar los campos adicionales según el tipo de pago seleccionado
                     if (this.value === "Efectivo") {
                         montoPagadoLabel.textContent = 'Monto Pagado Efectivo';
@@ -368,6 +365,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Modal de cantidad -->
         <div id="cantidadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cantidadModalLabel"
             aria-hidden="true">
@@ -464,6 +462,8 @@
             }
         </style>
     </div> <!-- .container -->
+
+
     <script>
         // Detectar la selección del vendedor y manejar la opción "Usar vendedor?"
         document.addEventListener('DOMContentLoaded', function() {
@@ -490,19 +490,23 @@
                     else idUserInput.value = '';
                 }
             }
+
             if (usarNo) usarNo.addEventListener('change', aplicarUsoVendedor);
             if (usarSi) usarSi.addEventListener('change', aplicarUsoVendedor);
+
             vendedorInput.addEventListener('input', function() {
                 const nombreSeleccionado = vendedorInput.value;
                 const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores')
                     .options).find(
                     option => option.value === nombreSeleccionado);
+
                 if (optionSeleccionada) {
                     // Guardar el vendedor seleccionado
                     selectedVendedor = {
                         id: optionSeleccionada.dataset.id,
                         nombre: nombreSeleccionado
                     };
+
                     // Asignar el ID del vendedor al campo oculto
                     idUserInput.value = selectedVendedor.id;
                 } else {
@@ -514,109 +518,13 @@
                     }
                 }
             });
+
             // Aplicar estado inicial
             aplicarUsoVendedor();
         });
-        document.addEventListener('DOMContentLoaded', function() {
-            const switchCheckbox = document.getElementById('garantia_switch');
-            const hiddenInput = document.getElementById('garantia_hidden');
-
-            // Función para sincronizar los valores ocultos con el estado del switch
-            function syncHiddenInputs() {
-                if (switchCheckbox.checked) {
-                    // Si el switch está activado (Con Garantía), el campo oculto se deshabilita
-                    hiddenInput.disabled = true;
-                } else {
-                    // Si el switch está desactivado (Sin Garantía), el campo oculto se habilita
-                    hiddenInput.disabled = false;
-                }
-            }
-
-            // Inicializar el estado
-            syncHiddenInputs();
-
-            // Escuchar cambios en el switch
-            switchCheckbox.addEventListener('change', function() {
-                syncHiddenInputs();
-            });
-            const switchCheckboxVendedor = document.getElementById('usar_vendedor_switch');
-            const hiddenInputVendedor = document.getElementById('usar_vendedor_hidden');
-            const vendedorSearchInput = document.getElementById('vendedorSearch');
-            const idUserInput = document.getElementById('id_user');
-            const defaultVendedorId = '{{ $defaultVendedorId }}'; // Asegúrate de que esta variable esté disponible
-
-            function syncHiddenInputsVendedor() {
-                if (switchCheckboxVendedor.checked) {
-                    // Switch activado (Sí), deshabilita el campo oculto "no", habilita el input de búsqueda
-                    hiddenInputVendedor.disabled = true;
-                    vendedorSearchInput.disabled = false;
-                    vendedorSearchInput.required = true;
-                    // Si ya hay un vendedor seleccionado, mantener el ID; sino, limpiar
-                    // (La lógica de selección de vendedor actualizará id_user)
-                } else {
-                    // Switch desactivado (No), habilita el campo oculto "no", deshabilita el input de búsqueda
-                    hiddenInputVendedor.disabled = false;
-                    vendedorSearchInput.disabled = true;
-                    vendedorSearchInput.required = false;
-                    vendedorSearchInput.value = ''; // Limpia el campo
-                    idUserInput.value = defaultVendedorId; // Restaura el ID por defecto
-                }
-            }
-
-            // Inicializar el estado del switch de vendedor (debe estar apagado por defecto)
-            // Aseguramos que el switch esté apagado si el valor oculto es "no"
-            if (hiddenInputVendedor.value === 'no') {
-                switchCheckboxVendedor.checked = false; // Asegura que el switch esté visualmente apagado
-            } else {
-                switchCheckboxVendedor.checked =
-                    true; // Asegura que el switch esté visualmente encendido si el valor oculto es "si"
-            }
-            syncHiddenInputsVendedor(); // Aplica el estado inicial
-
-            // Escuchar cambios en el switch del vendedor
-            switchCheckboxVendedor.addEventListener('change', syncHiddenInputsVendedor);
-
-            // --- Lógica existente para la selección de vendedor ---
-            // Mantenemos la lógica que actualiza el id_user basado en la selección del datalist
-            vendedorSearchInput.addEventListener('input', function() {
-                const nombreSeleccionado = vendedorSearchInput.value;
-                const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores')
-                    .options).find(
-                    option => option.value === nombreSeleccionado
-                );
-                if (optionSeleccionada && switchCheckboxVendedor
-                    .checked) { // Solo si el switch está activado
-                    idUserInput.value = optionSeleccionada.dataset.id;
-                } else if (!switchCheckboxVendedor.checked) {
-                    // Si el switch está apagado, restaurar ID por defecto
-                    idUserInput.value = defaultVendedorId;
-                } else {
-                    // Si el switch está encendido pero no hay opción válida seleccionada
-                    idUserInput.value = ''; // O puedes dejar el valor anterior si lo prefieres
-                }
-            });
-
-            // También es bueno escuchar el evento 'blur' para asegurar que si se borra el texto
-            // y no hay opción válida, el id_user se limpie (si el switch está encendido)
-            vendedorSearchInput.addEventListener('blur', function() {
-                if (switchCheckboxVendedor.checked) {
-                    const nombreSeleccionado = vendedorSearchInput.value;
-                    const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores')
-                        .options).find(
-                        option => option.value === nombreSeleccionado
-                    );
-                    if (!optionSeleccionada) {
-                        idUserInput.value = ''; // Limpiar si no coincide con ninguna opción
-                    }
-                }
-            });
-            // Opcional: Si necesitas asegurarte de que el valor correcto se envíe incluso si JavaScript falla,
-            // puedes manejar el submit del formulario.
-            // document.getElementById('venta-form').addEventListener('submit', function() {
-            //     syncHiddenInputs(); // Asegura el estado correcto antes de enviar
-            // 
-        });
     </script>
+
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- SweetAlert2 JS -->
@@ -641,17 +549,17 @@
                                 <div class="card card-widget widget-user shadow-lg">
                                             ${producto.producto.fotos && producto.producto.fotos.length > 0 ? 
                                                 `<div class="widget-user-header text-white" style="background: url('{{ asset('storage/') }}/${producto.producto.fotos[0].foto}') center center; background-size: cover;">
-                                                                                                                                                                                                                                                                                                                    <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
-                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                <div class="widget-user-image">
-                                                                                                                                                                                                                                                                                                                    <img class="img-circle" src="{{ asset('storage/') }}/${producto.producto.fotos[0].foto}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
-                                                                                                                                                                                                                                                                                                                </div>` : 
+                                                                                                                                                                                                                                                                            <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
+                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                        <div class="widget-user-image">
+                                                                                                                                                                                                                                                                            <img class="img-circle" src="{{ asset('storage/') }}/${producto.producto.fotos[0].foto}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
+                                                                                                                                                                                                                                                                        </div>` : 
                                                 `<div class="widget-user-header text-white" style="background-color: #ccc;">
-                                                                                                                                                                                                                                                                                                                    <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
-                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                <div class="widget-user-image">
-                                                                                                                                                                                                                                                                                                                    <img class="img-circle" src="{{ asset('path/to/default/image.jpg') }}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
-                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                            <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
+                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                        <div class="widget-user-image">
+                                                                                                                                                                                                                                                                            <img class="img-circle" src="{{ asset('path/to/default/image.jpg') }}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
+                                                                                                                                                                                                                                                                        </div>`
                                             }
                                     <br>
                                     <div class="card-footer">
@@ -662,32 +570,38 @@
                                                     <span class="description-text">PRECIO</span>
                                                 </div>
                                             </div>
+    
                                             <div class="col-sm-4 border-right">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${producto.producto.categoria ? producto.producto.categoria.categoria : 'No categoría'}</h5>
                                                     <span class="description-text">CATEGORÍA</span>
                                                 </div>
                                             </div>
+    
                                             <div class="col-sm-4">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${producto.producto.marca ? producto.producto.marca.marca : 'No marca'}</h5>
                                                     <span class="description-text">MARCA</span>
                                                 </div>
                                             </div>
+    
                                             <div class="col-sm-4">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${producto.producto.stock_actual}</h5>
                                                     <span class="description-text">TOTAL EN ALMACÉN</span>
                                                 </div>
                                             </div>
+    
                                             <div class="col-sm-4">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${producto.producto.stock_sucursal}</h5>
                                                     <span class="description-text">TOTAL EN SUCURSAL</span>
                                                 </div>
                                             </div>
+    
                                         </div>
                                     </div>
+    
                                     <a href="#" class="btn btn-block agregar-carrito ${producto.producto.stock_sucursal <= 0 ? 'out-of-stock' : 'btn-success'}" data-id="${producto.producto.id}" data-nombre="${producto.producto.nombre}" data-precio="${producto.producto.precio}" data-stock-sucursal="${producto.producto.stock_sucursal}" data-toggle="modal" data-target="#cantidadModal">
                                         ${producto.producto.stock_sucursal <= 0 ? 'PRODUCTO NO DISPONIBLE, AGREGUE CANTIDAD DEL PRODUCTO' : 'Vender'}
                                     </a>
@@ -695,8 +609,10 @@
                             </div>
                         `;
                         });
+
                         // Actualizar el listado de productos
                         $('#product-list').html(html);
+
                         // Actualizar los enlaces de paginación
                         var paginationLinks = '';
                         for (var i = 1; i <= response.productos.last_page; i++) {
@@ -710,13 +626,16 @@
                     }
                 });
             }
+
             // Cargar los productos al cargar la página
             fetchProductos();
+
             // Búsqueda de productos
             $('#search').on('keyup', function() {
                 var search = $(this).val();
                 fetchProductos(1, search);
             });
+
             // Paginación con AJAX
             $(document).on('click', '.page-link', function(e) {
                 e.preventDefault();
@@ -724,6 +643,7 @@
                 var search = $('#search').val();
                 fetchProductos(page, search);
             });
+
             // Bind eventos de clic a los botones agregar-carrito
             $(document).on('click', '.agregar-carrito', function(e) {
                 e.preventDefault();
@@ -733,6 +653,7 @@
                     precio: parseFloat($(this).data('precio')),
                     stockSucursal: parseInt($(this).data('stock-sucursal'))
                 };
+
                 // Verificar si el producto ya está en el carrito
                 const productoExistente = carrito.find(item => item.id === productoSeleccionado.id);
                 if (productoExistente) {
@@ -746,18 +667,24 @@
                     });
                     return;
                 }
+
                 // Limpiar el input de cantidad antes de abrir el modal
                 document.getElementById('cantidad-input').value = '';
+
                 // Abrir el modal de cantidad
                 $('#cantidadModal').modal('show');
             });
+
         });
     </script>
+
+
     <script>
         let carrito = [];
         let carritoContador = document.getElementById('carrito-contador');
         let listaCarrito = document.querySelector('#lista-carrito tbody');
         let productoSeleccionado = null;
+
         document.getElementById('confirmar-cantidad').addEventListener('click', function() {
             const cantidad = parseInt(document.getElementById('cantidad-input').value);
             if (cantidad > 0) {
@@ -773,6 +700,7 @@
                     });
                     return;
                 }
+
                 const productoExistente = carrito.find(item => item.id === productoSeleccionado.id);
                 if (productoExistente) {
                     productoExistente.cantidad += cantidad;
@@ -786,6 +714,7 @@
                             .stockSucursal // Guardar el stock en la sucursal para futuras validaciones
                     });
                 }
+
                 Swal.fire({
                     title: 'Éxito',
                     text: `${productoSeleccionado.nombre} agregado al carrito`,
@@ -795,6 +724,7 @@
                     // Abre el modal del carrito después de que el usuario acepte el mensaje
                     mostrarCarrito();
                 });
+
                 actualizarCarritoContador();
                 $('#cantidadModal').modal('hide');
             } else {
@@ -810,47 +740,61 @@
         function actualizarCarritoContador() {
             carritoContador.innerText = carrito.length;
         }
+
         document.getElementById('mostrar-carrito').addEventListener('click', function(e) {
             e.preventDefault();
             mostrarCarrito();
         });
+
         // Evento para calcular el total a pagar con descuento
         document.getElementById('descuento').addEventListener('input', function() {
             const descuento = parseFloat(this.value) || 0;
             const totalSinDescuento = parseFloat(document.getElementById('total-a-pagar').value) || 0;
+
             // Restar el descuento solo si se ingresa un valor
             const totalAPagar = totalSinDescuento + descuento;
             document.getElementById('monto-total').value = totalAPagar.toFixed(2);
+
             // Calcular cambio si hay un monto pagado
             calcularCambio();
         });
+
         // Evento para calcular el cambio basado en el monto pagado
         document.getElementById('pagado').addEventListener('input', function() {
             calcularCambio();
         });
+
         // Evento para actualizar el total a pagar cuando se modifica el total sin descuento
         document.getElementById('monto-total').addEventListener('input', function() {
             const totalSinDescuento = parseFloat(this.value) || 0;
             const descuento = parseFloat(document.getElementById('descuento').value) || 0;
+
             const totalAPagar = totalSinDescuento + descuento;
             document.getElementById('total-a-pagar').value = totalAPagar.toFixed(2);
+
             // Calcular cambio si hay un monto pagado
             calcularCambio();
         });
+
         // Evento para actualizar el total a pagar cuando se modifica el descuento
         document.getElementById('total-a-pagar').addEventListener('input', function() {
             const totalAPagar = parseFloat(this.value) || 0;
             const pagado = parseFloat(document.getElementById('pagado').value) || 0;
+
             const cambio = pagado - totalAPagar;
             document.getElementById('cambio').value = cambio >= 0 ? cambio.toFixed(2) : '0.00';
         });
+
         // Función para calcular el cambio
         function calcularCambio() {
             const pagado = parseFloat(document.getElementById('pagado').value) || 0;
             const totalAPagar = parseFloat(document.getElementById('total-a-pagar').value) || 0;
             const cambio = pagado - totalAPagar;
+
             document.getElementById('cambio').value = cambio >= 0 ? cambio.toFixed(2) : '0.00';
         }
+
+
         // Al iniciar, carga el carrito desde localStorage basado en el ID de la sucursal
         document.addEventListener('DOMContentLoaded', function() {
             const sucursalId = {{ $id }}; // Asegúrate de que este valor sea el ID de la sucursal actual
@@ -864,16 +808,20 @@
         // Función para mostrar el carrito
         function mostrarCarrito() {
             listaCarrito.innerHTML = '';
+
             if (carrito.length === 0) {
                 listaCarrito.innerHTML = '<tr><td colspan="6" class="text-center">El carrito está vacío</td></tr>';
                 document.getElementById('monto-total').value = '0.00';
                 document.getElementById('total-a-pagar').value = '0.00'; // Resetear total a pagar
                 return;
             }
+
             let totalAPagar = 0;
+
             carrito.forEach((item, index) => {
                 const total = item.precio * item.cantidad;
                 totalAPagar += total;
+
                 // Agregar fila editable para precio, cantidad y total
                 listaCarrito.innerHTML += `
                 <tr>
@@ -886,19 +834,24 @@
                 </tr>
                 `;
             });
+
             // Actualizar el total a pagar
             document.getElementById('monto-total').value = totalAPagar.toFixed(2);
             document.getElementById('cambio').value = ''; // Limpiar cambio
             document.getElementById('total-a-pagar').value = totalAPagar.toFixed(2); // Total a pagar sin descuento
+
             // Agregar eventos para actualizar datos al modificar precio, cantidad o total
             // Agregar eventos para actualizar datos al modificar precio, cantidad o total
+
             // Actualizar los totales generales cuando el campo pierda el foco (evento blur)
             document.querySelectorAll('.precio-input, .cantidad-input, .total-input').forEach(input => {
                 input.addEventListener('blur', function() {
                     const index = this.getAttribute('data-index');
                     let nuevoPrecio, nuevaCantidad, nuevoTotal;
+
                     // Validar y limpiar el valor de entrada
                     const valor = this.value.trim();
+
                     if (this.classList.contains('precio-input')) {
                         nuevoPrecio = parseFloat(this.value); // Cambiar a parseFloat
                         carrito[index].precio = nuevoPrecio;
@@ -925,6 +878,7 @@
                         nuevoTotal = parseFloat(this
                             .value); // Cambiar a parseFloat para aceptar decimales en total
                         nuevaCantidad = carrito[index].cantidad;
+
                         if (nuevaCantidad > 0) {
                             nuevoPrecio = nuevoTotal / nuevaCantidad;
                             carrito[index].precio = nuevoPrecio;
@@ -939,14 +893,17 @@
                             return;
                         }
                     }
+
                     // Actualizar los campos relacionados
                     const fila = listaCarrito.querySelectorAll('tr')[index];
                     fila.querySelector('.precio-input').value = carrito[index].precio.toFixed(2);
                     fila.querySelector('.cantidad-input').value = carrito[index].cantidad.toFixed(2);
                     fila.querySelector('.total-input').value = nuevoTotal.toFixed(2);
+
                     // Actualizar los totales generales
                     actualizarTotales();
                 });
+
                 // Evitar que se elimine el producto cuando se presiona Enter en los campos editables
                 input.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
@@ -954,32 +911,43 @@
                             .preventDefault(); // Evita la acción por defecto de la tecla Enter (que podría hacer que el producto se elimine)
                     }
                 });
+
             });
+
             $('#carritoModal').modal('show');
+
             // Almacenar el carrito en localStorage con el ID de la sucursal
             const sucursalId = {{ $id }};
             localStorage.setItem(`carrito-${sucursalId}`, JSON.stringify(carrito));
         }
+
+
         // Función para actualizar los totales generales
         function actualizarTotales() {
             let totalAPagar = 0;
             carrito.forEach(item => {
                 totalAPagar += item.precio * item.cantidad;
             });
+
             document.getElementById('monto-total').value = totalAPagar.toFixed(2);
             document.getElementById('total-a-pagar').value = totalAPagar.toFixed(2); // Total a pagar sin descuento
+
             // Calcular cambio si hay un monto pagado
             calcularCambio();
+
             // Almacenar el carrito en localStorage con el ID de la sucursal
             const sucursalId = {{ $id }};
             localStorage.setItem(`carrito-${sucursalId}`, JSON.stringify(carrito));
         }
+
+
         document.getElementById('vaciar-carrito-fvc').addEventListener('click', function(e) {
             e.preventDefault();
             carrito = [];
             actualizarCarritoContador();
             mostrarCarrito();
             // Limpiar el carrito en localStorage
+
             const sucursalId = {{ $id }};
             localStorage.removeItem(`carrito-${sucursalId}`);
         });
@@ -987,19 +955,24 @@
             if (e.target.classList.contains('eliminar')) {
                 const id = parseInt(e.target.getAttribute('data-id')); // Convertir a número
                 carrito = carrito.filter(item => item.id !== id); // Filtrar productos que no coincidan con el id
+
                 actualizarCarritoContador();
                 mostrarCarrito();
+
                 // Actualizar el carrito en localStorage
                 const sucursalId =
                     {{ $id }}; // Este es un valor dinámico, asegúrate de que esté definido en el backend
                 localStorage.setItem(`carrito-${sucursalId}`, JSON.stringify(carrito));
             }
         });
+
         document.getElementById('venta-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Evitar el envío predeterminado del formulario
+
             // Obtener el id de sucursal (por ejemplo, desde un valor en el backend o en un campo oculto)
             const sucursalId =
                 {{ $id }}; // Asumimos que $id es el ID de la sucursal disponible desde el backend
+
             // Verificar si la caja está abierta para esa sucursal
             fetch(`/verificar-caja-abierta/${sucursalId}`, {
                     method: 'GET',
@@ -1019,12 +992,14 @@
                         });
                         return; // No enviar el formulario si la caja no está abierta
                     }
+
                     // La caja está abierta, continuar con la lógica de venta
                     const user = document.getElementById('id_user').value;
                     // Validaciones
                     const clienteNombre = document.getElementById('cliente').value.trim();
                     const costoTotal = parseFloat(document.getElementById('total-a-pagar').value);
                     const ci = document.getElementById('ci').value; // Obtiene el valor como una cadena
+
                     if (!clienteNombre) {
                         Swal.fire({
                             title: 'Error',
@@ -1034,6 +1009,7 @@
                         });
                         return;
                     }
+
                     if (isNaN(costoTotal) || costoTotal <= 0) {
                         Swal.fire({
                             title: 'Error',
@@ -1043,6 +1019,7 @@
                         });
                         return;
                     }
+
                     // Recoger productos del carrito con precios y cantidades editados
                     const productos = [];
                     const rows = document.querySelectorAll('#lista-carrito tbody tr');
@@ -1056,6 +1033,7 @@
                             .value); // Cantidad editable
                         const total = parseFloat(row.querySelector('td:nth-child(5) input')
                             .value); // Total editable
+
                         productos.push({
                             id: id,
                             nombre: nombre,
@@ -1064,31 +1042,37 @@
                             total: total
                         });
                     });
+
                     // Get the selected payment method
                     const tipoPagoInput = document.querySelector('input[name="tipo_pago"]:checked');
                     const tipoPago = tipoPagoInput ? tipoPagoInput.value : null;
+
                     // Crear campos ocultos para el formulario
                     const inputProductos = document.createElement('input');
                     inputProductos.type = 'hidden';
                     inputProductos.name = 'productos';
                     inputProductos.value = JSON.stringify(productos);
                     this.appendChild(inputProductos);
+
                     const inputCliente = document.createElement('input');
                     inputCliente.type = 'hidden';
                     inputCliente.name = 'nombre_cliente';
                     inputCliente.value = clienteNombre;
                     this.appendChild(inputCliente);
+
                     const inputCostoTotal = document.createElement('input');
                     inputCostoTotal.type = 'hidden';
                     inputCostoTotal.name = 'costo_total';
                     inputCostoTotal.value = costoTotal.toFixed(2);
                     this.appendChild(inputCostoTotal);
+
                     // Agregar el campo CI
                     const inputCI = document.createElement('input');
                     inputCI.type = 'hidden';
                     inputCI.name = 'ci'; // Asegúrate de que el nombre sea correcto
                     inputCI.value = ci;
                     this.appendChild(inputCI);
+
                     // Agregar el campo descuento
                     const descuentoInput = document.getElementById('descuento');
                     const inputDescuento = document.createElement('input');
@@ -1096,6 +1080,7 @@
                     inputDescuento.name = 'descuento';
                     inputDescuento.value = descuentoInput.value || '0'; // Usa 0 si no hay valor
                     this.appendChild(inputDescuento);
+
                     // Agregar monto pagado
                     const pagadoInput = document.getElementById('pagado');
                     const inputPagado = document.createElement('input');
@@ -1103,6 +1088,7 @@
                     inputPagado.name = 'pagado';
                     inputPagado.value = pagadoInput.value || '0'; // Usa 0 si no hay valor
                     this.appendChild(inputPagado);
+
                     // Agregar monto pagado (QR)
                     const pagadoqrInput = document.getElementById('pagado_qr');
                     const inputPagadoqr = document.createElement('input');
@@ -1110,6 +1096,7 @@
                     inputPagadoqr.name = 'pagado_qr';
                     inputPagadoqr.value = pagadoqrInput.value || '0'; // Usa 0 si no hay valor
                     this.appendChild(inputPagadoqr);
+
                     // Agregar el cambio (si es necesario)
                     const cambioInput = document.getElementById('cambio');
                     const inputCambio = document.createElement('input');
@@ -1117,18 +1104,21 @@
                     inputCambio.name = 'cambio';
                     inputCambio.value = cambioInput.value || '0'; // Usa 0 si no hay valor
                     this.appendChild(inputCambio);
+
                     // Agregar el tipo de pago
                     const inputTipoPago = document.createElement('input');
                     inputTipoPago.type = 'hidden';
                     inputTipoPago.name = 'tipo_pago';
                     inputTipoPago.value = tipoPago;
                     this.appendChild(inputTipoPago);
+
                     // **Aquí es donde agregas el id_sucursal como un campo oculto**
                     const inputSucursal = document.createElement('input');
                     inputSucursal.type = 'hidden';
                     inputSucursal.name = 'id_sucursal';
                     inputSucursal.value = sucursalId; // Aquí ya tomas el id de sucursal
                     this.appendChild(inputSucursal);
+
                     // Enviar el formulario usando fetch
                     fetch(this.action, {
                             method: 'POST',
@@ -1145,6 +1135,7 @@
                                 let garantia = document.querySelector('input[name="garantia"]:checked');
                                 let tipoGarantia = garantia ? garantia.value :
                                     'sin_garantia'; // Si no hay selección, por defecto 'sin_garantia'
+
                                 // Redirigir para descargar el PDF
                                 const url = '{{ route('nota.pdf') }}?nombre_cliente=' + encodeURIComponent(
                                         clienteNombre) +
@@ -1160,6 +1151,7 @@
                                     '&garantia=' + encodeURIComponent(tipoGarantia) + // Agregar garantía
                                     '&id_sucursal=' + encodeURIComponent(
                                         sucursalId); // Aquí agregamos el id_sucursal
+
                                 // Abrir la URL en una nueva pestaña
                                 window.open(url, '_blank');
                                 // Limpiar el carrito y los campos del formulario
@@ -1176,7 +1168,9 @@
                                 listaCarrito.innerHTML =
                                     '<tr><td colspan="6" class="text-center">El carrito está vacío</td></tr>';
                                 carritoContador.innerText = '0';
+
                                 window.location.reload();
+
                             } else {
                                 // Manejar error
                                 Swal.fire({
@@ -1195,6 +1189,7 @@
                                 icon: 'error',
                                 confirmButtonText: 'Aceptar'
                             });
+
                             window.location.reload();
                         });
                 })
@@ -1219,6 +1214,7 @@
                 $(this).find('.modal-body').focus();
             });
         });
+
         // Evento para cerrar el modal del QR y abrir el modal del carrito
         document.getElementById('cerrar-qr-modal').addEventListener('click', function() {
             $('#qrModal').modal('hide');
@@ -1228,6 +1224,7 @@
                 $(this).find('.modal-body').focus();
             });
         });
+
         // Evento para regresar al carrito desde el modal del QR
         document.getElementById('regresar-carrito').addEventListener('click', function() {
             $('#qrModal').modal('hide');
@@ -1246,581 +1243,13 @@
                 const hours = now.getHours().toString().padStart(2, '0');
                 const minutes = now.getMinutes().toString().padStart(2, '0');
                 const seconds = now.getSeconds().toString().padStart(2, '0');
+
                 document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
             }
+
             // Update the clock every second
             updateClock();
             setInterval(updateClock, 1000);
         });
     </script>
 @stop
-
-<!-- Estilos mejorados para el modal del carrito -->
-<!-- Estilos mejorados para el modal del carrito -->
-<style>
-    /* Estilos específicos para el modal del carrito */
-    #carritoModal .modal-content {
-        border-radius: 0.5rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        overflow: hidden;
-        /* Aplicar gradiente al fondo del contenido del modal */
-        background: linear-gradient(135deg, #f0f0f0 0%, #e6d6ff 25%, #d1c5ff 50%, #b8d0ff 75%, #b8d0ff 100%);
-        color: #333;
-        /* Color de texto general para contraste */
-    }
-
-    #carritoModal .modal-header {
-        background: linear-gradient(135deg, #ffffff 0%, #cc9efd 25%, #a582ff 50%, #3b78d8 75%, #3b78d8 100%);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #a582ff;
-        /* Borde que combine con el gradiente */
-    }
-
-    #carritoModal .modal-title {
-        font-weight: 600;
-        font-size: 1.25rem;
-    }
-
-    /* Estilos para la sección de garantía en el header */
-    #carritoModal .modal-header label[for="compra_producto"] {
-        margin-bottom: 0;
-        font-weight: 500;
-        align-self: center;
-    }
-
-    #carritoModal .modal-header .row {
-        flex: 1;
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
-
-    #carritoModal .modal-header .form-check-input[type="radio"] {
-        margin-top: 0.25rem;
-    }
-
-    #carritoModal .modal-header .form-check-label {
-        margin-bottom: 0;
-        font-size: 0.875rem;
-    }
-
-    /* Estilos para la tabla del carrito */
-    #lista-carrito th,
-    #lista-carrito td {
-        vertical-align: middle;
-        border-color: #a582ff;
-        /* Bordes que combinen con el gradiente */
-        color: #333;
-        /* Texto en color oscuro para contraste */
-    }
-
-    #lista-carrito {
-        background-color: rgba(255, 255, 255, 0.1);
-        /* Fondo ligeramente transparente */
-        border-radius: 0.3rem;
-    }
-
-    #lista-carrito input.form-control {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.5rem;
-        background-color: rgba(255, 255, 255, 0.8);
-        /* Fondo claro para inputs */
-        border: 1px solid #a582ff;
-        color: #333;
-        border-radius: 0.25rem;
-    }
-
-    #lista-carrito input.form-control:focus {
-        background-color: white;
-        /* Fondo blanco al enfocar */
-        border-color: #3b78d8;
-        /* Borde más oscuro al enfocar */
-        box-shadow: 0 0 0 0.2rem rgba(59, 120, 216, 0.25);
-        /* Sombra de foco */
-    }
-
-    /* Estilos para los formularios en el body */
-    #carritoModal .modal-body .form-group label {
-        font-weight: 500;
-        color: #492a7a;
-        /* Color de label que combine con el gradiente */
-    }
-
-    #carritoModal .modal-body .form-control {
-        border-radius: 0.25rem;
-        border: 1px solid #a582ff;
-        background-color: rgba(255, 255, 255, 0.8);
-        /* Fondo claro para inputs */
-        color: #333;
-    }
-
-    #carritoModal .modal-body .form-control:focus {
-        background-color: white;
-        /* Fondo blanco al enfocar */
-        border-color: #3b78d8;
-        /* Borde más oscuro al enfocar */
-        box-shadow: 0 0 0 0.2rem rgba(59, 120, 216, 0.25);
-        /* Sombra de foco */
-    }
-
-    /* Estilos para botones en el footer */
-    #carritoModal .modal-footer {
-        border-top: 1px solid #a582ff;
-        /* Borde que combine con el gradiente */
-        padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #e6d6ff 0%, #d1c5ff 100%);
-        /* Fondo del footer */
-    }
-
-    #carritoModal .modal-footer .btn {
-        border-radius: 0.25rem;
-        font-weight: 500;
-        border: none;
-        /* Quitar borde por defecto */
-    }
-
-    #carritoModal .modal-footer .btn-secondary {
-        background-color: #6c757d;
-        /* Color secundario estándar */
-        color: white;
-    }
-
-    #carritoModal .modal-footer .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    #carritoModal .modal-footer .btn-danger {
-        background-color: #dc3545;
-        /* Color peligro */
-        color: white;
-    }
-
-    #carritoModal .modal-footer .btn-danger:hover {
-        background-color: #c82333;
-    }
-
-    #carritoModal .modal-footer .btn-success {
-        background-color: #28a745;
-        /* Color éxito */
-        color: white;
-    }
-
-    #carritoModal .modal-footer .btn-success:hover {
-        background-color: #218838;
-    }
-
-    /* Ajuste del botón "Ver QR" */
-    #carritoModal .modal-header .btn-info {
-        background-color: #3b78d8;
-        /* Color azul del gradiente */
-        border-color: #3b78d8;
-    }
-
-    #carritoModal .modal-header .btn-info:hover {
-        background-color: #2a5cb0;
-        /* Color más oscuro al pasar el mouse */
-        border-color: #2a5cb0;
-    }
-
-    /* Ajuste del botón de cierre */
-    #carritoModal .modal-header .close {
-        color: white;
-        /* Color blanco para el botón de cierre */
-        opacity: 0.7;
-        font-size: 1.5rem;
-    }
-
-    #carritoModal .modal-header .close:hover {
-        opacity: 1;
-    }
-
-    /* From Uiverse.io by JaydipPrajapati1910 - Adaptado para Garantía */
-    .toggle-button-cover {
-        display: inline-block;
-        position: relative;
-        width: 60px;
-        height: 30px;
-        box-sizing: border-box;
-        vertical-align: middle;
-    }
-
-    .button-cover {
-        height: 100%;
-        margin: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 4px -1px rgba(165, 130, 255, 0.5);
-        /* Sombra que combine con el color del gradiente */
-        border-radius: 2px;
-    }
-
-    .button-cover,
-    .knobs,
-    .layer {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-
-    .button {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 60px;
-        height: 26px;
-        margin: 0 auto;
-        overflow: hidden;
-    }
-
-    .checkbox {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        opacity: 0;
-        cursor: pointer;
-        z-index: 3;
-    }
-
-    .knobs {
-        z-index: 2;
-    }
-
-    .layer {
-        width: 100%;
-        background-color: #e6d6ff;
-        /* Color de fondo cuando está apagado (desde el gradiente) */
-        transition: 0.3s ease all;
-        z-index: 1;
-    }
-
-    .button.r,
-    .button.r .layer {
-        border-radius: 13px;
-    }
-
-    #button-3 .knobs:before {
-        content: "NO";
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 22px;
-        height: 22px;
-        color: #fff;
-        font-size: 8px;
-        font-weight: bold;
-        text-align: center;
-        line-height: 22px;
-        padding: 0;
-        background-color: #dc3545;
-        /* Color rojo para "No" */
-        border-radius: 50%;
-        transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
-        box-sizing: border-box;
-    }
-
-    #button-3 .checkbox:active+.knobs:before {
-        width: 36px;
-        border-radius: 11px;
-    }
-
-    #button-3 .checkbox:checked:active+.knobs:before {
-        margin-left: -14px;
-    }
-
-    #button-3 .checkbox:checked+.knobs:before {
-        content: "SI";
-        left: 36px;
-        background-color: #28a745;
-        /* Color verde para "Sí" */
-    }
-
-    #button-3 .checkbox:checked~.layer {
-        background-color: #d1c5ff;
-        /* Color de fondo cuando está encendido (desde el gradiente) */
-    }
-
-    /* From Uiverse.io by JaydipPrajapati1910 - Adaptado para Vendedor */
-    .toggle-button-cover-vendedor {
-        display: inline-block;
-        position: relative;
-        width: 60px;
-        height: 30px;
-        box-sizing: border-box;
-        vertical-align: middle;
-        margin-left: 10px;
-    }
-
-    .button-vendedor-cover {
-        height: 100%;
-        margin: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 4px -1px rgba(165, 130, 255, 0.5);
-        /* Sombra que combine con el color del gradiente */
-        border-radius: 2px;
-    }
-
-    .button-vendedor-cover,
-    .knobs-vendedor,
-    .layer-vendedor {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-
-    .button-vendedor {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 60px;
-        height: 26px;
-        margin: 0 auto;
-        overflow: hidden;
-    }
-
-    .checkbox-vendedor {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        opacity: 0;
-        cursor: pointer;
-        z-index: 3;
-    }
-
-    .knobs-vendedor {
-        z-index: 2;
-    }
-
-    .layer-vendedor {
-        width: 100%;
-        background-color: #e6d6ff;
-        /* Color de fondo cuando está apagado (desde el gradiente) */
-        transition: 0.3s ease all;
-        z-index: 1;
-    }
-
-    .button-vendedor.r,
-    .button-vendedor.r .layer-vendedor {
-        border-radius: 13px;
-    }
-
-    #button-vendedor .knobs-vendedor:before {
-        content: "NO";
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 22px;
-        height: 22px;
-        color: #fff;
-        font-size: 8px;
-        font-weight: bold;
-        text-align: center;
-        line-height: 22px;
-        padding: 0;
-        background-color: #dc3545;
-        /* Rojo para "No" (apagado) */
-        border-radius: 50%;
-        transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
-        box-sizing: border-box;
-    }
-
-    #button-vendedor .checkbox-vendedor:active+.knobs-vendedor:before {
-        width: 36px;
-        border-radius: 11px;
-    }
-
-    #button-vendedor .checkbox-vendedor:checked:active+.knobs-vendedor:before {
-        margin-left: -14px;
-    }
-
-    #button-vendedor .checkbox-vendedor:checked+.knobs-vendedor:before {
-        content: "SI";
-        left: 36px;
-        background-color: #28a745;
-        /* Verde para "Sí" (encendido) */
-    }
-
-    #button-vendedor .checkbox-vendedor:checked~.layer-vendedor {
-        background-color: #d1c5ff;
-        /* Color de fondo cuando está encendido (desde el gradiente) */
-    }
-
-    /* From Uiverse.io by 3HugaDa3 - Adaptado para Radios de Método de Pago */
-    .checkbox-wrapper {
-        --checkbox-size: 25px;
-        --checkbox-color: #a582ff;
-        /* Color principal basado en el gradiente */
-        --checkbox-shadow: rgba(165, 130, 255, 0.3);
-        /* Sombra basada en el color principal */
-        --checkbox-border: rgba(165, 130, 255, 0.7);
-        /* Borde basado en el color principal */
-        display: flex;
-        align-items: center;
-        position: relative;
-        cursor: pointer;
-        padding: 5px 10px;
-        margin-bottom: 0;
-        transition: all 0.3s ease;
-    }
-
-    .checkbox-wrapper input[type="radio"] {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-    }
-
-    .checkbox-wrapper .checkmark {
-        position: relative;
-        width: var(--checkbox-size);
-        height: var(--checkbox-size);
-        border: 2px solid var(--checkbox-border);
-        border-radius: 8px;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(165, 130, 255, 0.1);
-        /* Fondo ligeramente opaco del color principal */
-        box-shadow: 0 0 15px var(--checkbox-shadow);
-        overflow: hidden;
-    }
-
-    .checkbox-wrapper .checkmark::before {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, var(--checkbox-color), #c5b0ff);
-        /* Degradado similar al del gradiente general */
-        opacity: 0;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        transform: scale(0) rotate(-45deg);
-    }
-
-    .checkbox-wrapper input[type="radio"]:checked~.checkmark::before {
-        opacity: 1;
-        transform: scale(1) rotate(0);
-    }
-
-    .checkbox-wrapper .checkmark svg {
-        width: 0;
-        height: 0;
-        color: #1a1a1a;
-        z-index: 1;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-    }
-
-    .checkbox-wrapper input[type="radio"]:checked~.checkmark svg {
-        width: 18px;
-        height: 18px;
-        transform: rotate(360deg);
-    }
-
-    .checkbox-wrapper:hover .checkmark {
-        border-color: var(--checkbox-color);
-        transform: scale(1.1);
-        box-shadow:
-            0 0 20px var(--checkbox-shadow),
-            0 0 40px var(--checkbox-shadow),
-            inset 0 0 10px var(--checkbox-shadow);
-    }
-
-    .checkbox-wrapper input[type="radio"]:checked~.checkmark {
-        animation: pulse 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 20px var(--checkbox-shadow);
-        }
-
-        50% {
-            transform: scale(0.9);
-            box-shadow:
-                0 0 30px var(--checkbox-shadow),
-                0 0 50px var(--checkbox-shadow);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow: 0 0 20px var(--checkbox-shadow);
-        }
-    }
-
-    .checkbox-wrapper .label {
-        margin-left: 10px;
-        font-family: "Segoe UI", sans-serif;
-        color: var(--checkbox-color);
-        /* Color del texto basado en el color principal */
-        font-size: 16px;
-        text-shadow: 0 0 10px var(--checkbox-shadow);
-        opacity: 0.9;
-        transition: all 0.3s;
-        white-space: nowrap;
-    }
-
-    .checkbox-wrapper:hover .label {
-        opacity: 1;
-        transform: translateX(5px);
-    }
-
-    /* Glowing dots animation */
-    .checkbox-wrapper::after,
-    .checkbox-wrapper::before {
-        content: "";
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: var(--checkbox-color);
-        opacity: 0;
-        transition: all 0.5s;
-    }
-
-    .checkbox-wrapper::before {
-        left: -10px;
-        top: 50%;
-    }
-
-    .checkbox-wrapper::after {
-        right: -10px;
-        top: 50%;
-    }
-
-    .checkbox-wrapper:hover::before {
-        opacity: 1;
-        transform: translateX(-10px);
-        box-shadow: 0 0 10px var(--checkbox-color);
-    }
-
-    .checkbox-wrapper:hover::after {
-        opacity: 1;
-        transform: translateX(10px);
-        box-shadow: 0 0 10px var(--checkbox-color);
-    }
-
-    /* Estilos para el contenedor del grupo de radios */
-    #carritoModal .form-group div.row {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    #carritoModal .form-group div.row>div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-        min-width: 0;
-    }
-</style>

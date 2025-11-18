@@ -92,6 +92,7 @@
         </style>
         {{-- 
         modal carrito --}}
+        {{-- modal carrito --}}
         <form id="venta-form" method="POST" action="{{ route('control.fin') }}" target="_blank">
             @csrf
             {{-- linea de codigo agregado --}}
@@ -104,27 +105,23 @@
                     <div class="modal-content">
                         <div class="modal-header d-flex justify-content-between align-items-center">
                             <h5 class="modal-title" id="carritoModalLabel">Productos en el Carrito</h5>
-                            <div class="row align-items-center w-50"> <!-- Ajustado ancho y alineación -->
-                                <div class="col-md-4">
-
-                                </div>
-                                <div class="col-md-6 d-flex justify-content-start"> <!-- Contenedor para el switch -->
-                                    <!-- From Uiverse.io by JaydipPrajapati1910 -->
-                                    <label class="mr-3 mb-0">Garantía:</label>
+                            <div class="d-flex align-items-center">
+                                <!-- Switch para garantía -->
+                                <div class="mr-3"> <!-- Agregué un margen derecho para separarlo del título -->
                                     <div class="toggle-button-cover">
-                                        <div id="button-3" class="button r">
-
-                                            <input class="checkbox" type="checkbox" name="garantia" id="garantia_switch"
-                                                value="con garantia" unchecked> <!-- Inicialmente sin marcar -->
+                                        <div id="button-garantia" class="button r">
+                                            <!-- El checkbox reemplaza al par de radio buttons -->
+                                            <input class="checkbox" type="checkbox" name="garantia" id="switch_garantia"
+                                                value="con garantia">
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
                                     </div>
-                                    <!-- Campo oculto para manejar "sin garantia" cuando el switch esté apagado -->
-                                    <input type="hidden" name="garantia" id="garantia_hidden" value="sin garantia">
+                                    <!-- Label para "Sin Garantía" (estado apagado) -->
+                                    <label class="form-check-label mr-2 mb-0" for="switch_garantia">Sin Garantía</label>
+                                    <!-- Label para "Con Garantía" (estado encendido) -->
+                                    <label class="form-check-label mb-0" for="switch_garantia">Con Garantía</label>
                                 </div>
-                            </div>
-                            <div class="d-flex align-items-center">
                                 <!-- Botón Ver QR movido aquí -->
                                 <button type="button" class="btn btn-info btn-sm mr-2" id="ver-qr" data-toggle="modal"
                                     data-target="#qrModal" data-dismiss="modal">
@@ -135,7 +132,7 @@
                                 </button>
                             </div>
                         </div>
-
+                        <!-- ... (resto del cuerpo del modal) ... -->
                         <div class="modal-body">
                             <div class="table-responsive">
                                 <table id="lista-carrito" class="table table-striped">
@@ -165,7 +162,7 @@
                                     <div class="form-group">
                                         <label for="ci">CI / NIT</label>
                                         <input type="text" name="ci" id="ci" class="form-control"
-                                            placeholder="Ingrese CI del cliente" required>
+                                            placeholder="Ingrese CI del cliente">
                                     </div>
                                 </div>
 
@@ -175,18 +172,19 @@
                                             <label for="vendedorSearch" class="mr-3 mb-0"><strong>¿Elegir
                                                     vendedor?</strong></label>
 
-                                            <!-- Contenedor para el nuevo switch -->
-                                            <div class="toggle-button-cover-vendedor">
-                                                <div id="button-vendedor" class="button-vendedor r">
-                                                    <input class="checkbox-vendedor" type="checkbox" name="usar_vendedor"
-                                                        id="usar_vendedor_switch" value="si">
-                                                    <div class="knobs-vendedor"></div>
-                                                    <div class="layer-vendedor"></div>
+                                            <div>
+                                                <div class="form-check form-check-inline m-0">
+                                                    <input class="form-check-input" type="radio" name="usar_vendedor"
+                                                        id="usar_vendedor_no" value="no" checked>
+                                                    <label class="form-check-label" for="usar_vendedor_no">No</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline m-0">
+                                                    <input class="form-check-input" type="radio" name="usar_vendedor"
+                                                        id="usar_vendedor_si" value="si">
+                                                    <label class="form-check-label" for="usar_vendedor_si">Sí</label>
                                                 </div>
                                             </div>
-                                            <!-- Campo oculto para manejar "no" cuando el switch esté apagado -->
-                                            <input type="hidden" name="usar_vendedor" id="usar_vendedor_hidden"
-                                                value="no">
                                         </div>
 
                                         <input type="text" id="vendedorSearch" class="form-control"
@@ -234,49 +232,30 @@
                                         <label for="tipo_pago">Método de Pago</label>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label class="checkbox-wrapper">
-                                                    <input required type="radio" name="tipo_pago" value="Efectivo"
-                                                        id="efectivo_radio" >
-                                                    <div class="checkmark">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <path d="M20 6L9 17L4 12" stroke-width="3"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                        </svg>
-                                                    </div>
-                                                    <span class="label">Efectivo</span>
-                                                </label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_pago"
+                                                        value="Efectivo" id="efectivo">
+                                                    <label class="form-check-label" for="efectivo">Efectivo</label>
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="checkbox-wrapper">
-                                                    <input type="radio" name="tipo_pago" value="QR"
-                                                        id="transferencia_bancaria_radio">
-                                                    <div class="checkmark">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <path d="M20 6L9 17L4 12" stroke-width="3"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                        </svg>
-                                                    </div>
-                                                    <span class="label">QR</span>
-                                                </label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_pago"
+                                                        value="QR" id="transferencia_bancaria">
+                                                    <label class="form-check-label mr-2"
+                                                        for="transferencia_bancaria">Transferencia QR</label>
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="checkbox-wrapper">
-                                                    <input type="radio" name="tipo_pago" value="Efectivo y QR"
-                                                        id="pago_efectivo_qr_radio">
-                                                    <div class="checkmark">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <path d="M20 6L9 17L4 12" stroke-width="3"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                        </svg>
-                                                    </div>
-                                                    <span class="label">Efectivo y QR</span>
-                                                </label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_pago"
+                                                        value="Efectivo y QR" id="pago_efectivo_qr">
+                                                    <label class="form-check-label" for="pago_efectivo_qr">Pago
+                                                        Efectivo y
+                                                        QR</label>
+                                                </div>
                                             </div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -517,105 +496,6 @@
             // Aplicar estado inicial
             aplicarUsoVendedor();
         });
-        document.addEventListener('DOMContentLoaded', function() {
-            const switchCheckbox = document.getElementById('garantia_switch');
-            const hiddenInput = document.getElementById('garantia_hidden');
-
-            // Función para sincronizar los valores ocultos con el estado del switch
-            function syncHiddenInputs() {
-                if (switchCheckbox.checked) {
-                    // Si el switch está activado (Con Garantía), el campo oculto se deshabilita
-                    hiddenInput.disabled = true;
-                } else {
-                    // Si el switch está desactivado (Sin Garantía), el campo oculto se habilita
-                    hiddenInput.disabled = false;
-                }
-            }
-
-            // Inicializar el estado
-            syncHiddenInputs();
-
-            // Escuchar cambios en el switch
-            switchCheckbox.addEventListener('change', function() {
-                syncHiddenInputs();
-            });
-            const switchCheckboxVendedor = document.getElementById('usar_vendedor_switch');
-            const hiddenInputVendedor = document.getElementById('usar_vendedor_hidden');
-            const vendedorSearchInput = document.getElementById('vendedorSearch');
-            const idUserInput = document.getElementById('id_user');
-            const defaultVendedorId = '{{ $defaultVendedorId }}'; // Asegúrate de que esta variable esté disponible
-
-            function syncHiddenInputsVendedor() {
-                if (switchCheckboxVendedor.checked) {
-                    // Switch activado (Sí), deshabilita el campo oculto "no", habilita el input de búsqueda
-                    hiddenInputVendedor.disabled = true;
-                    vendedorSearchInput.disabled = false;
-                    vendedorSearchInput.required = true;
-                    // Si ya hay un vendedor seleccionado, mantener el ID; sino, limpiar
-                    // (La lógica de selección de vendedor actualizará id_user)
-                } else {
-                    // Switch desactivado (No), habilita el campo oculto "no", deshabilita el input de búsqueda
-                    hiddenInputVendedor.disabled = false;
-                    vendedorSearchInput.disabled = true;
-                    vendedorSearchInput.required = false;
-                    vendedorSearchInput.value = ''; // Limpia el campo
-                    idUserInput.value = defaultVendedorId; // Restaura el ID por defecto
-                }
-            }
-
-            // Inicializar el estado del switch de vendedor (debe estar apagado por defecto)
-            // Aseguramos que el switch esté apagado si el valor oculto es "no"
-            if (hiddenInputVendedor.value === 'no') {
-                switchCheckboxVendedor.checked = false; // Asegura que el switch esté visualmente apagado
-            } else {
-                switchCheckboxVendedor.checked =
-                    true; // Asegura que el switch esté visualmente encendido si el valor oculto es "si"
-            }
-            syncHiddenInputsVendedor(); // Aplica el estado inicial
-
-            // Escuchar cambios en el switch del vendedor
-            switchCheckboxVendedor.addEventListener('change', syncHiddenInputsVendedor);
-
-            // --- Lógica existente para la selección de vendedor ---
-            // Mantenemos la lógica que actualiza el id_user basado en la selección del datalist
-            vendedorSearchInput.addEventListener('input', function() {
-                const nombreSeleccionado = vendedorSearchInput.value;
-                const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores')
-                    .options).find(
-                    option => option.value === nombreSeleccionado
-                );
-                if (optionSeleccionada && switchCheckboxVendedor
-                    .checked) { // Solo si el switch está activado
-                    idUserInput.value = optionSeleccionada.dataset.id;
-                } else if (!switchCheckboxVendedor.checked) {
-                    // Si el switch está apagado, restaurar ID por defecto
-                    idUserInput.value = defaultVendedorId;
-                } else {
-                    // Si el switch está encendido pero no hay opción válida seleccionada
-                    idUserInput.value = ''; // O puedes dejar el valor anterior si lo prefieres
-                }
-            });
-
-            // También es bueno escuchar el evento 'blur' para asegurar que si se borra el texto
-            // y no hay opción válida, el id_user se limpie (si el switch está encendido)
-            vendedorSearchInput.addEventListener('blur', function() {
-                if (switchCheckboxVendedor.checked) {
-                    const nombreSeleccionado = vendedorSearchInput.value;
-                    const optionSeleccionada = Array.from(document.getElementById('sugerencias_vendedores')
-                        .options).find(
-                        option => option.value === nombreSeleccionado
-                    );
-                    if (!optionSeleccionada) {
-                        idUserInput.value = ''; // Limpiar si no coincide con ninguna opción
-                    }
-                }
-            });
-            // Opcional: Si necesitas asegurarte de que el valor correcto se envíe incluso si JavaScript falla,
-            // puedes manejar el submit del formulario.
-            // document.getElementById('venta-form').addEventListener('submit', function() {
-            //     syncHiddenInputs(); // Asegura el estado correcto antes de enviar
-            // 
-        });
     </script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -641,17 +521,17 @@
                                 <div class="card card-widget widget-user shadow-lg">
                                             ${producto.producto.fotos && producto.producto.fotos.length > 0 ? 
                                                 `<div class="widget-user-header text-white" style="background: url('{{ asset('storage/') }}/${producto.producto.fotos[0].foto}') center center; background-size: cover;">
-                                                                                                                                                                                                                                                                                                                    <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
-                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                <div class="widget-user-image">
-                                                                                                                                                                                                                                                                                                                    <img class="img-circle" src="{{ asset('storage/') }}/${producto.producto.fotos[0].foto}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
-                                                                                                                                                                                                                                                                                                                </div>` : 
+                                                                                                                                                                                                                                                                            <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
+                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                        <div class="widget-user-image">
+                                                                                                                                                                                                                                                                            <img class="img-circle" src="{{ asset('storage/') }}/${producto.producto.fotos[0].foto}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
+                                                                                                                                                                                                                                                                        </div>` : 
                                                 `<div class="widget-user-header text-white" style="background-color: #ccc;">
-                                                                                                                                                                                                                                                                                                                    <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
-                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                <div class="widget-user-image">
-                                                                                                                                                                                                                                                                                                                    <img class="img-circle" src="{{ asset('path/to/default/image.jpg') }}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
-                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                            <h3 class="widget-user-username nombre-producto" style="text-shadow: 2px 2px 4px rgba(7, 7, 7, 0.5); font-size: 1.5em; font-weight: bold;">${producto.producto.nombre}</h3>
+                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                        <div class="widget-user-image">
+                                                                                                                                                                                                                                                                            <img class="img-circle" src="{{ asset('path/to/default/image.jpg') }}" alt="Producto" loading="lazy" style="width: 128px; height: 128px; object-fit: cover;">
+                                                                                                                                                                                                                                                                        </div>`
                                             }
                                     <br>
                                     <div class="card-footer">
@@ -1256,170 +1136,124 @@
 @stop
 
 <!-- Estilos mejorados para el modal del carrito -->
-<!-- Estilos mejorados para el modal del carrito -->
 <style>
     /* Estilos específicos para el modal del carrito */
     #carritoModal .modal-content {
         border-radius: 0.5rem;
+        /* Bordes ligeramente redondeados */
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        /* Sombra más pronunciada */
         overflow: hidden;
-        /* Aplicar gradiente al fondo del contenido del modal */
-        background: linear-gradient(135deg, #f0f0f0 0%, #e6d6ff 25%, #d1c5ff 50%, #b8d0ff 75%, #b8d0ff 100%);
-        color: #333;
-        /* Color de texto general para contraste */
+        /* Asegura que los bordes redondeados se apliquen al contenido también */
     }
 
     #carritoModal .modal-header {
-        background: linear-gradient(135deg, #ffffff 0%, #cc9efd 25%, #a582ff 50%, #3b78d8 75%, #3b78d8 100%);
+        background-color: #972754;
+        /* Color de encabezado oscuro */
         color: white;
         padding: 1rem 1.5rem;
-        border-bottom: 1px solid #a582ff;
-        /* Borde que combine con el gradiente */
+        border-bottom: 1px solid #dee2e6;
     }
 
     #carritoModal .modal-title {
         font-weight: 600;
+        /* Título más grueso */
         font-size: 1.25rem;
+        /* Tamaño de título ligeramente más grande */
     }
 
     /* Estilos para la sección de garantía en el header */
     #carritoModal .modal-header label[for="compra_producto"] {
         margin-bottom: 0;
+        /* Elimina el margen inferior del label */
         font-weight: 500;
+        /* Peso de fuente medio para el label */
         align-self: center;
+        /* Alinea verticalmente con otros elementos */
     }
 
     #carritoModal .modal-header .row {
         flex: 1;
+        /* Permite que la fila de garantía ocupe espacio disponible */
         margin-left: 1rem;
+        /* Espacio entre el título y la garantía */
         margin-right: 1rem;
+        /* Espacio entre la garantía y los botones */
     }
 
     #carritoModal .modal-header .form-check-input[type="radio"] {
         margin-top: 0.25rem;
+        /* Ajusta el alineado vertical del radio */
     }
 
     #carritoModal .modal-header .form-check-label {
         margin-bottom: 0;
+        /* Elimina el margen inferior del label del radio */
         font-size: 0.875rem;
+        /* Tamaño de fuente ligeramente más pequeño */
     }
 
     /* Estilos para la tabla del carrito */
     #lista-carrito th,
     #lista-carrito td {
         vertical-align: middle;
-        border-color: #a582ff;
-        /* Bordes que combinen con el gradiente */
-        color: #333;
-        /* Texto en color oscuro para contraste */
-    }
-
-    #lista-carrito {
-        background-color: rgba(255, 255, 255, 0.1);
-        /* Fondo ligeramente transparente */
-        border-radius: 0.3rem;
+        /* Centra verticalmente el contenido */
     }
 
     #lista-carrito input.form-control {
         font-size: 0.875rem;
+        /* Tamaño de fuente consistente en inputs */
         padding: 0.375rem 0.5rem;
-        background-color: rgba(255, 255, 255, 0.8);
-        /* Fondo claro para inputs */
-        border: 1px solid #a582ff;
-        color: #333;
-        border-radius: 0.25rem;
-    }
-
-    #lista-carrito input.form-control:focus {
-        background-color: white;
-        /* Fondo blanco al enfocar */
-        border-color: #3b78d8;
-        /* Borde más oscuro al enfocar */
-        box-shadow: 0 0 0 0.2rem rgba(59, 120, 216, 0.25);
-        /* Sombra de foco */
+        /* Padding más pequeño */
     }
 
     /* Estilos para los formularios en el body */
     #carritoModal .modal-body .form-group label {
         font-weight: 500;
-        color: #492a7a;
-        /* Color de label que combine con el gradiente */
+        /* Peso de fuente medio para labels */
+        color: #495057;
+        /* Color de label ligeramente más oscuro */
     }
 
     #carritoModal .modal-body .form-control {
         border-radius: 0.25rem;
-        border: 1px solid #a582ff;
-        background-color: rgba(255, 255, 255, 0.8);
-        /* Fondo claro para inputs */
-        color: #333;
+        /* Bordes ligeramente redondeados para inputs */
+        border: 1px solid #ced4da;
+        /* Borde estándar */
     }
 
     #carritoModal .modal-body .form-control:focus {
-        background-color: white;
-        /* Fondo blanco al enfocar */
-        border-color: #3b78d8;
-        /* Borde más oscuro al enfocar */
-        box-shadow: 0 0 0 0.2rem rgba(59, 120, 216, 0.25);
+        border-color: #80bdff;
+        /* Color de borde en foco */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         /* Sombra de foco */
     }
 
     /* Estilos para botones en el footer */
     #carritoModal .modal-footer {
-        border-top: 1px solid #a582ff;
-        /* Borde que combine con el gradiente */
+        border-top: 1px solid #dee2e6;
         padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #e6d6ff 0%, #d1c5ff 100%);
-        /* Fondo del footer */
     }
 
     #carritoModal .modal-footer .btn {
         border-radius: 0.25rem;
+        /* Bordes ligeramente redondeados para botones */
         font-weight: 500;
-        border: none;
-        /* Quitar borde por defecto */
-    }
-
-    #carritoModal .modal-footer .btn-secondary {
-        background-color: #6c757d;
-        /* Color secundario estándar */
-        color: white;
-    }
-
-    #carritoModal .modal-footer .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    #carritoModal .modal-footer .btn-danger {
-        background-color: #dc3545;
-        /* Color peligro */
-        color: white;
-    }
-
-    #carritoModal .modal-footer .btn-danger:hover {
-        background-color: #c82333;
-    }
-
-    #carritoModal .modal-footer .btn-success {
-        background-color: #28a745;
-        /* Color éxito */
-        color: white;
-    }
-
-    #carritoModal .modal-footer .btn-success:hover {
-        background-color: #218838;
+        /* Peso de fuente medio para botones */
     }
 
     /* Ajuste del botón "Ver QR" */
     #carritoModal .modal-header .btn-info {
-        background-color: #3b78d8;
-        /* Color azul del gradiente */
-        border-color: #3b78d8;
+        background-color: #17a2b8;
+        /* Color azul cian */
+        border-color: #17a2b8;
+        /* Mismo color para el borde */
     }
 
     #carritoModal .modal-header .btn-info:hover {
-        background-color: #2a5cb0;
+        background-color: #138496;
         /* Color más oscuro al pasar el mouse */
-        border-color: #2a5cb0;
+        border-color: #117a8b;
     }
 
     /* Ajuste del botón de cierre */
@@ -1427,30 +1261,39 @@
         color: white;
         /* Color blanco para el botón de cierre */
         opacity: 0.7;
+        /* Ligeramente transparente */
         font-size: 1.5rem;
+        /* Tamaño de fuente más grande */
     }
 
     #carritoModal .modal-header .close:hover {
         opacity: 1;
+        /* Opaco al pasar el mouse */
     }
 
-    /* From Uiverse.io by JaydipPrajapati1910 - Adaptado para Garantía */
+    /* Estilos para el switch de garantía */
     .toggle-button-cover {
         display: inline-block;
+        /* Cambié de table-cell para que se adapte mejor */
         position: relative;
         width: 60px;
+        /* Ancho reducido para que quepa mejor en el header */
         height: 30px;
+        /* Altura reducida */
         box-sizing: border-box;
         vertical-align: middle;
+        /* Alinea verticalmente con los labels */
     }
 
     .button-cover {
         height: 100%;
         margin: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 4px -1px rgba(165, 130, 255, 0.5);
-        /* Sombra que combine con el color del gradiente */
-        border-radius: 2px;
+        /* Quité el margen para mejor ajuste */
+        background-color: transparent;
+        /* Fondo transparente */
+        box-shadow: none;
+        /* Quité la sombra */
+        border-radius: 4px;
     }
 
     .button-cover,
@@ -1466,10 +1309,12 @@
     .button {
         position: relative;
         top: 50%;
-        transform: translateY(-50%);
         width: 60px;
-        height: 26px;
-        margin: 0 auto;
+        /* Ancho del botón */
+        height: 24px;
+        /* Altura del botón */
+        margin: -12px auto 0 auto;
+        /* Ajuste vertical */
         overflow: hidden;
     }
 
@@ -1490,337 +1335,65 @@
 
     .layer {
         width: 100%;
-        background-color: #e6d6ff;
-        /* Color de fondo cuando está apagado (desde el gradiente) */
+        background-color: #e0e0e0;
+        /* Color base cuando está apagado */
         transition: 0.3s ease all;
         z-index: 1;
+        border-radius: 12px;
+        /* Bordes redondeados */
     }
 
     .button.r,
     .button.r .layer {
-        border-radius: 13px;
+        border-radius: 12px;
+        /* Bordes redondeados */
     }
 
-    #button-3 .knobs:before {
-        content: "NO";
+    #button-garantia .knobs:before {
+        content: "ON";
+        /* Texto para "Con Garantía" */
         position: absolute;
         top: 2px;
         left: 2px;
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         color: #fff;
         font-size: 8px;
+        /* Tamaño de fuente más pequeño */
         font-weight: bold;
         text-align: center;
-        line-height: 22px;
+        line-height: 20px;
+        /* Centra verticalmente el texto */
         padding: 0;
-        background-color: #dc3545;
-        /* Color rojo para "No" */
+        background-color: #4CAF50;
+        /* Verde para "ON" */
         border-radius: 50%;
         transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
         box-sizing: border-box;
     }
 
-    #button-3 .checkbox:active+.knobs:before {
+    #button-garantia .checkbox:active+.knobs:before {
         width: 36px;
-        border-radius: 11px;
+        /* Ancho temporal al hacer clic */
+        border-radius: 12px;
     }
 
-    #button-3 .checkbox:checked:active+.knobs:before {
-        margin-left: -14px;
+    #button-garantia .checkbox:checked:active+.knobs:before {
+        margin-left: -16px;
+        /* Ajuste temporal al hacer clic estando encendido */
     }
 
-    #button-3 .checkbox:checked+.knobs:before {
-        content: "SI";
-        left: 36px;
-        background-color: #28a745;
-        /* Color verde para "Sí" */
+    #button-garantia .checkbox:checked+.knobs:before {
+        content: "OFF";
+        /* Texto para "Sin Garantía" */
+        left: 38px;
+        /* Nueva posición cuando está encendido */
+        background-color: #f44336;
+        /* Rojo para "OFF" */
     }
 
-    #button-3 .checkbox:checked~.layer {
-        background-color: #d1c5ff;
-        /* Color de fondo cuando está encendido (desde el gradiente) */
-    }
-
-    /* From Uiverse.io by JaydipPrajapati1910 - Adaptado para Vendedor */
-    .toggle-button-cover-vendedor {
-        display: inline-block;
-        position: relative;
-        width: 60px;
-        height: 30px;
-        box-sizing: border-box;
-        vertical-align: middle;
-        margin-left: 10px;
-    }
-
-    .button-vendedor-cover {
-        height: 100%;
-        margin: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 4px -1px rgba(165, 130, 255, 0.5);
-        /* Sombra que combine con el color del gradiente */
-        border-radius: 2px;
-    }
-
-    .button-vendedor-cover,
-    .knobs-vendedor,
-    .layer-vendedor {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-
-    .button-vendedor {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 60px;
-        height: 26px;
-        margin: 0 auto;
-        overflow: hidden;
-    }
-
-    .checkbox-vendedor {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        opacity: 0;
-        cursor: pointer;
-        z-index: 3;
-    }
-
-    .knobs-vendedor {
-        z-index: 2;
-    }
-
-    .layer-vendedor {
-        width: 100%;
-        background-color: #e6d6ff;
-        /* Color de fondo cuando está apagado (desde el gradiente) */
-        transition: 0.3s ease all;
-        z-index: 1;
-    }
-
-    .button-vendedor.r,
-    .button-vendedor.r .layer-vendedor {
-        border-radius: 13px;
-    }
-
-    #button-vendedor .knobs-vendedor:before {
-        content: "NO";
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 22px;
-        height: 22px;
-        color: #fff;
-        font-size: 8px;
-        font-weight: bold;
-        text-align: center;
-        line-height: 22px;
-        padding: 0;
-        background-color: #dc3545;
-        /* Rojo para "No" (apagado) */
-        border-radius: 50%;
-        transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
-        box-sizing: border-box;
-    }
-
-    #button-vendedor .checkbox-vendedor:active+.knobs-vendedor:before {
-        width: 36px;
-        border-radius: 11px;
-    }
-
-    #button-vendedor .checkbox-vendedor:checked:active+.knobs-vendedor:before {
-        margin-left: -14px;
-    }
-
-    #button-vendedor .checkbox-vendedor:checked+.knobs-vendedor:before {
-        content: "SI";
-        left: 36px;
-        background-color: #28a745;
-        /* Verde para "Sí" (encendido) */
-    }
-
-    #button-vendedor .checkbox-vendedor:checked~.layer-vendedor {
-        background-color: #d1c5ff;
-        /* Color de fondo cuando está encendido (desde el gradiente) */
-    }
-
-    /* From Uiverse.io by 3HugaDa3 - Adaptado para Radios de Método de Pago */
-    .checkbox-wrapper {
-        --checkbox-size: 25px;
-        --checkbox-color: #a582ff;
-        /* Color principal basado en el gradiente */
-        --checkbox-shadow: rgba(165, 130, 255, 0.3);
-        /* Sombra basada en el color principal */
-        --checkbox-border: rgba(165, 130, 255, 0.7);
-        /* Borde basado en el color principal */
-        display: flex;
-        align-items: center;
-        position: relative;
-        cursor: pointer;
-        padding: 5px 10px;
-        margin-bottom: 0;
-        transition: all 0.3s ease;
-    }
-
-    .checkbox-wrapper input[type="radio"] {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-    }
-
-    .checkbox-wrapper .checkmark {
-        position: relative;
-        width: var(--checkbox-size);
-        height: var(--checkbox-size);
-        border: 2px solid var(--checkbox-border);
-        border-radius: 8px;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(165, 130, 255, 0.1);
-        /* Fondo ligeramente opaco del color principal */
-        box-shadow: 0 0 15px var(--checkbox-shadow);
-        overflow: hidden;
-    }
-
-    .checkbox-wrapper .checkmark::before {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, var(--checkbox-color), #c5b0ff);
-        /* Degradado similar al del gradiente general */
-        opacity: 0;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        transform: scale(0) rotate(-45deg);
-    }
-
-    .checkbox-wrapper input[type="radio"]:checked~.checkmark::before {
-        opacity: 1;
-        transform: scale(1) rotate(0);
-    }
-
-    .checkbox-wrapper .checkmark svg {
-        width: 0;
-        height: 0;
-        color: #1a1a1a;
-        z-index: 1;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-    }
-
-    .checkbox-wrapper input[type="radio"]:checked~.checkmark svg {
-        width: 18px;
-        height: 18px;
-        transform: rotate(360deg);
-    }
-
-    .checkbox-wrapper:hover .checkmark {
-        border-color: var(--checkbox-color);
-        transform: scale(1.1);
-        box-shadow:
-            0 0 20px var(--checkbox-shadow),
-            0 0 40px var(--checkbox-shadow),
-            inset 0 0 10px var(--checkbox-shadow);
-    }
-
-    .checkbox-wrapper input[type="radio"]:checked~.checkmark {
-        animation: pulse 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 20px var(--checkbox-shadow);
-        }
-
-        50% {
-            transform: scale(0.9);
-            box-shadow:
-                0 0 30px var(--checkbox-shadow),
-                0 0 50px var(--checkbox-shadow);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow: 0 0 20px var(--checkbox-shadow);
-        }
-    }
-
-    .checkbox-wrapper .label {
-        margin-left: 10px;
-        font-family: "Segoe UI", sans-serif;
-        color: var(--checkbox-color);
-        /* Color del texto basado en el color principal */
-        font-size: 16px;
-        text-shadow: 0 0 10px var(--checkbox-shadow);
-        opacity: 0.9;
-        transition: all 0.3s;
-        white-space: nowrap;
-    }
-
-    .checkbox-wrapper:hover .label {
-        opacity: 1;
-        transform: translateX(5px);
-    }
-
-    /* Glowing dots animation */
-    .checkbox-wrapper::after,
-    .checkbox-wrapper::before {
-        content: "";
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: var(--checkbox-color);
-        opacity: 0;
-        transition: all 0.5s;
-    }
-
-    .checkbox-wrapper::before {
-        left: -10px;
-        top: 50%;
-    }
-
-    .checkbox-wrapper::after {
-        right: -10px;
-        top: 50%;
-    }
-
-    .checkbox-wrapper:hover::before {
-        opacity: 1;
-        transform: translateX(-10px);
-        box-shadow: 0 0 10px var(--checkbox-color);
-    }
-
-    .checkbox-wrapper:hover::after {
-        opacity: 1;
-        transform: translateX(10px);
-        box-shadow: 0 0 10px var(--checkbox-color);
-    }
-
-    /* Estilos para el contenedor del grupo de radios */
-    #carritoModal .form-group div.row {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    #carritoModal .form-group div.row>div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-        min-width: 0;
+    #button-garantia .checkbox:checked~.layer {
+        background-color: #bbdefb;
+        /* Color de fondo cuando está encendido */
     }
 </style>
