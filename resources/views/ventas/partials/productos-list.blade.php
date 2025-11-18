@@ -8,13 +8,12 @@
                     alt="{{ $item->producto->nombre }}"
                     style="height: 180px; object-fit: cover;"
                     loading="lazy"
-                    onerror="this.closest('.card').querySelector('.card-img-top-placeholder').style.display='block'; this.remove();">
+                    onerror="this.closest('.card').querySelector('.placeholder-img').style.display='block'; this.remove();">
             @endif
 
             @if($item->producto->fotos->isEmpty())
-                <div class="card-img-top-placeholder bg-light text-center py-5" style="height: 180px; display: flex; align-items: center; justify-content: center;">
+                <div class="placeholder-img bg-light text-center py-5" style="height: 180px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-box-open fa-2x text-muted"></i>
-                    <div class="mt-1">Sin imagen</div>
                 </div>
             @endif
 
