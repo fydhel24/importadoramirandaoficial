@@ -23,6 +23,7 @@ class AuditoriaDetalle extends Model
     ];
 
 
+    
     public function producto()
     {
         return $this->belongsTo(Producto::class);
